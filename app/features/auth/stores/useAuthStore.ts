@@ -1,6 +1,5 @@
-import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
 import { useRepo } from 'pinia-orm';
+
 import { User } from '../models/User';
 import type { AuthSession, LoginCredentials } from '../types/auth.types';
 
@@ -16,8 +15,6 @@ export const useAuthStore = defineStore(
     });
 
     async function login(credentials: LoginCredentials) {
-      console.log('Logging in with', credentials);
-
       session.value = {
         token: 'mock-token-abc123',
         expiresAt: new Date(Date.now() + 3600_000).toISOString()

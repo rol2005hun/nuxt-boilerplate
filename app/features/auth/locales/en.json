@@ -2,7 +2,7 @@
   "login": {
     "title": "Sign in",
     "emailLabel": "Email address",
-    "emailPlaceholder": "you@example.com",
+    "emailPlaceholder": "name{'@'}example.com",
     "passwordLabel": "Password",
     "passwordPlaceholder": "••••••••",
     "submit": "Sign in",

@@ -30,7 +30,7 @@ const { isAuthenticated, currentUser, logout } = useAuth();
             </AppButton>
           </template>
           <template v-else>
-            <AppButton href="/login" variant="secondary">Sign in</AppButton>
+            <AppButton href="/login" variant="secondary">{{ $t('nav.signIn') }}</AppButton>
           </template>
         </div>
       </nav>

@@ -122,7 +122,7 @@ async function handleSubmit() {
 
   &__error {
     font-size: var(--text-sm);
-    color: #ef4444;
+    color: var(--color-danger);
     text-align: center;
   }
 
