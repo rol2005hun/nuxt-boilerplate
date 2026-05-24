@@ -27,7 +27,7 @@ Pages are thin wrappers — they delegate to feature components.
 ## No Comments
 
 Write self-documenting code. No inline comments, no JSDoc.
-Only `// TODO:` is allowed for intentional stubs.
+Absolutely no comments are allowed in the code, not even `// TODO:` comments. No exceptions.
 
 ## i18n
 
@@ -75,3 +75,7 @@ refactor(auth): extract login logic into useAuth composable
 
 - Subject: max 72 chars, lowercase, no trailing period
 - Breaking change: `feat(auth)!: remove legacy session`
+
+## Dependencies
+
+- **Dependencyt nem torlunk le:** Csak akkor törlünk függőséget vagy modult, ha azt a felhasználó kifejezetten kérte, vagy közösen megbeszéltük, hogy nincs rá szükség. Bármilyen hiba esetén inkább megkerüljük vagy konfiguráljuk a hibás modult, de nem töröljük le kérdés nélkül.
