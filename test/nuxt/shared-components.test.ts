@@ -33,10 +33,14 @@ describe('Shared Components', () => {
     expect(wrapper.text()).toContain('Content');
   });
 
-  it('renders AppCheckbox', async () => {
-    const wrapper = await mountSuspended(AppCheckbox, { props: { label: 'Check me' } });
+  it('renders AppCheckbox and emits update:modelValue', async () => {
+    const wrapper = await mountSuspended(AppCheckbox, {
+      props: { label: 'Check me', modelValue: false }
+    });
     expect(wrapper.exists()).toBe(true);
     expect(wrapper.text()).toContain('Check me');
+    await wrapper.find('input').setValue(true);
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([true]);
   });
 
   it('renders AppIcon', async () => {
@@ -44,27 +48,43 @@ describe('Shared Components', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  it('renders AppInput', async () => {
-    const wrapper = await mountSuspended(AppInput, { props: { placeholder: 'Type here' } });
+  it('renders AppInput and emits update:modelValue', async () => {
+    const wrapper = await mountSuspended(AppInput, {
+      props: { placeholder: 'Type here', modelValue: '' }
+    });
     expect(wrapper.exists()).toBe(true);
     expect(wrapper.find('input').attributes('placeholder')).toBe('Type here');
+    await wrapper.find('input').setValue('Hello');
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['Hello']);
   });
 
-  it('renders AppModal', async () => {
+  it('renders AppModal and handles close events', async () => {
     const wrapper = await mountSuspended(AppModal, {
       props: { modelValue: true, title: 'Modal Title' }
     });
     expect(wrapper.exists()).toBe(true);
+
+    const closeBtn = wrapper.find('.modal__close');
+    if (closeBtn.exists()) {
+      await closeBtn.trigger('click');
+      expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([false]);
+    }
   });
 
-  it('renders AppSelect', async () => {
+  it('renders AppSelect and emits update:modelValue', async () => {
     const wrapper = await mountSuspended(AppSelect, {
       props: {
-        options: [{ label: 'Option 1', value: '1' }]
+        modelValue: '1',
+        options: [
+          { label: 'Option 1', value: '1' },
+          { label: 'Option 2', value: '2' }
+        ]
       }
     });
     expect(wrapper.exists()).toBe(true);
     expect(wrapper.text()).toContain('Option 1');
+    await wrapper.find('select').setValue('2');
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['2']);
   });
 
   it('renders AppSpinner', async () => {
@@ -72,16 +92,29 @@ describe('Shared Components', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  it('renders AppTextarea', async () => {
-    const wrapper = await mountSuspended(AppTextarea, { props: { placeholder: 'Long text' } });
+  it('renders AppTextarea and emits update:modelValue', async () => {
+    const wrapper = await mountSuspended(AppTextarea, {
+      props: { placeholder: 'Long text', modelValue: '' }
+    });
     expect(wrapper.exists()).toBe(true);
     expect(wrapper.find('textarea').attributes('placeholder')).toBe('Long text');
+    await wrapper.find('textarea').setValue('Some content');
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['Some content']);
   });
 
-  it('renders AppToggle', async () => {
-    const wrapper = await mountSuspended(AppToggle, { props: { label: 'Switch me' } });
+  it('renders AppToggle and emits update:modelValue', async () => {
+    const wrapper = await mountSuspended(AppToggle, {
+      props: { label: 'Switch me', modelValue: false }
+    });
     expect(wrapper.exists()).toBe(true);
     expect(wrapper.text()).toContain('Switch me');
+
+    // Toggle label wrapper click or input directly
+    const input = wrapper.find('input[type="checkbox"]');
+    if (input.exists()) {
+      await input.setValue(true);
+      expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([true]);
+    }
   });
 
   it('renders AppTooltip', async () => {
