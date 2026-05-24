@@ -1,5 +1,3 @@
-<script setup lang="ts"></script>
-
 <template>
   <div class="app-brand">
     <svg
@@ -44,9 +42,9 @@
       var(--color-primary),
       hsl(var(--color-primary-h) 90% calc(var(--color-primary-l) + 15%))
     );
-    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
     letter-spacing: -0.02em;
     white-space: nowrap;
   }
