@@ -19,7 +19,7 @@
         </linearGradient>
       </defs>
     </svg>
-    <span class="app-brand__name">{{ $t('brandName') }}</span>
+    <span class="app-brand__name">{{ $t('appName') }}</span>
   </div>
 </template>
 
