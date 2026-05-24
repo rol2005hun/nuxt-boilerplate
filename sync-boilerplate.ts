@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { dirname, resolve, sep } from 'node:path';
 
 interface GithubContent {
   name: string;
@@ -19,9 +19,9 @@ interface PackageJson {
   [key: string]: unknown;
 }
 
-const OWNER = 'rol2005hun';
-const REPO = 'nuxt-boilerplate';
-const REF = 'main';
+const OWNER = process.env.BOILERPLATE_OWNER ?? 'rol2005hun';
+const REPO = process.env.BOILERPLATE_REPO ?? 'nuxt-boilerplate';
+const REF = process.env.BOILERPLATE_REF ?? 'main';
 const SELF_PATH = 'sync-boilerplate.ts';
 const TARGETS = [
   '.cursor',
@@ -71,6 +71,16 @@ const buildContentsUrl = (path: string) => {
   return `https://api.github.com/repos/${OWNER}/${REPO}/contents/${encodedPath}?ref=${REF}`;
 };
 
+const resolveSafePath = (relativePath: string) => {
+  const cwd = process.cwd();
+  const resolvedPath = resolve(cwd, relativePath);
+  const prefix = cwd.endsWith(sep) ? cwd : `${cwd}${sep}`;
+  if (!resolvedPath.startsWith(prefix)) {
+    throw new Error(`Unsafe path: ${relativePath}`);
+  }
+  return resolvedPath;
+};
+
 const fetchJson = async <T>(url: string): Promise<T> => {
   const response = await fetch(url, { headers: apiHeaders });
   if (!response.ok) {
@@ -105,7 +115,7 @@ const writeRemoteFile = async (content: GithubContent) => {
   if (!content.download_url) {
     throw new Error(`Missing download URL for ${content.path}`);
   }
-  const localPath = resolve(process.cwd(), content.path);
+  const localPath = resolveSafePath(content.path);
   mkdirSync(dirname(localPath), { recursive: true });
   const data = await fetchBuffer(content.download_url);
   writeFileSync(localPath, data);
@@ -114,7 +124,7 @@ const writeRemoteFile = async (content: GithubContent) => {
 const syncPath = async (path: string): Promise<void> => {
   const content = await fetchJson<GithubContent | GithubContent[]>(buildContentsUrl(path));
   if (Array.isArray(content)) {
-    const localDir = resolve(process.cwd(), path);
+    const localDir = resolveSafePath(path);
     if (existsSync(localDir)) {
       rmSync(localDir, { recursive: true, force: true });
     }
@@ -131,7 +141,7 @@ const syncPath = async (path: string): Promise<void> => {
 };
 
 const syncPackageJson = async () => {
-  const localPath = resolve(process.cwd(), 'package.json');
+  const localPath = resolveSafePath('package.json');
   const localData = readFileSync(localPath, 'utf8');
   const localJson = JSON.parse(localData) as PackageJson;
   const remoteData = await getRemoteFileBuffer('package.json');
@@ -162,13 +172,13 @@ const selfUpdate = async () => {
     return false;
   }
   const remoteData = await getRemoteFileBuffer(SELF_PATH);
-  const localPath = resolve(process.cwd(), SELF_PATH);
+  const localPath = resolveSafePath(SELF_PATH);
   const localData = existsSync(localPath) ? readFileSync(localPath) : Buffer.from('');
   if (localData.equals(remoteData)) {
     return false;
   }
   writeFileSync(localPath, remoteData);
-  const child = spawn('pnpm', ['exec', 'tsx', SELF_PATH, '--skip-self-update'], {
+  const child = spawn('tsx', [SELF_PATH, '--skip-self-update'], {
     stdio: 'inherit',
     detached: true,
     env: process.env
@@ -180,7 +190,7 @@ const selfUpdate = async () => {
 const run = async () => {
   const updated = await selfUpdate();
   if (updated) {
-    return;
+    process.exit(0);
   }
   await syncPackageJson();
   for (const target of TARGETS) {
