@@ -185,7 +185,8 @@ const selfUpdate = async () => {
     {
       stdio: 'inherit',
       detached: true,
-      env: process.env
+      env: process.env,
+      shell: process.platform === 'win32'
     }
   );
   child.unref();
