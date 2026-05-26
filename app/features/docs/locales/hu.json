@@ -1,0 +1,25 @@
+{
+  "nav": "Dokumentáció",
+  "metaTitle": "Dokumentáció",
+  "eyebrow": "Dokumentáció",
+  "title": "Építs funkciókat magabiztosan",
+  "subtitle": "Ez a mintaoldal az app/features/docs/locales/en.json fájlból olvas fordításokat, és feature-központú docs élményt jelenít meg.",
+  "actions": {
+    "primary": "Vissza a főoldalra",
+    "secondary": "Bejelentkezés megnyitása"
+  },
+  "sections": {
+    "quickStart": {
+      "title": "Gyors kezdés",
+      "description": "Hozz létre egy feature mappát, először a típusokat definiáld, majd kis lépésekben kösd össze a store-t, composable-t és komponenst."
+    },
+    "architecture": {
+      "title": "Architektúra",
+      "description": "A page-ek maradjanak vékonyak. A business logikát composable-okba, az állapotot Pinia store-okba tedd, hogy a nézetek tiszták és kiszámíthatók maradjanak."
+    },
+    "i18n": {
+      "title": "Feature fordítások",
+      "description": "A fordításokat az app/features/docs/locales/en.json fájlban helyezd el, hogy az i18n plugin a docs.* kulcsok alá olvassa be őket."
+    }
+  }
+}

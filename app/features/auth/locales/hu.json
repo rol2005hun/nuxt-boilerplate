@@ -1,0 +1,14 @@
+{
+  "login": {
+    "title": "Bejelentkezés",
+    "emailLabel": "E-mail cím",
+    "emailPlaceholder": "nev{'@'}pelda.com",
+    "passwordLabel": "Jelszó",
+    "passwordPlaceholder": "••••••••",
+    "submit": "Bejelentkezés",
+    "submitting": "Bejelentkezés...",
+    "noAccount": "Még nincs fiókod?"
+  },
+  "loginError": "Érvénytelen e-mail cím vagy jelszó. Próbáld újra.",
+  "logoutSuccess": "Sikeresen kijelentkeztél."
+}

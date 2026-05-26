@@ -10,13 +10,24 @@ const props = withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <Icon :name="props.name" :size="String(props.size)" class="app-icon" />
+  <span class="app-icon" :style="{ '--app-icon-size': String(props.size) }">
+    <ClientOnly>
+      <Icon :name="props.name" :size="String(props.size)" />
+    </ClientOnly>
+  </span>
 </template>
 
 <style scoped lang="scss">
 .app-icon {
   display: inline-flex;
   flex-shrink: 0;
+  width: var(--app-icon-size);
+  height: var(--app-icon-size);
+  line-height: 0;
   color: inherit;
+}
+
+.app-icon :deep(svg) {
+  display: block;
 }
 </style>

@@ -15,6 +15,8 @@ import AppTextarea from '@/components/shared/Textarea.vue';
 import AppToast from '@/components/shared/Toast.vue';
 import AppToggle from '@/components/shared/Toggle.vue';
 import AppTooltip from '@/components/shared/Tooltip.vue';
+import AppSidebar from '@/components/shared/Sidebar.vue';
+import AppSidebarItem from '@/components/shared/SidebarItem.vue';
 import AppButton from '@/components/shared/Button.vue';
 import AppLanguagePicker from '@/components/shared/LanguagePicker.vue';
 
@@ -80,6 +82,36 @@ describe('Shared Components', () => {
       const wrapper = await mountSuspended(AppButton, { props: { loading: true } });
       expect(wrapper.find('.btn__spinner').exists()).toBe(true);
       await wrapper.trigger('click');
+    });
+  });
+
+  describe('Sidebar', () => {
+    it('renders header, nav and footer content', async () => {
+      const wrapper = await mountSuspended(AppSidebar, {
+        slots: {
+          'header-top': () => 'Top',
+          'header-bottom': () => 'Bottom',
+          default: () => 'Nav content',
+          footer: () => 'Footer'
+        }
+      });
+
+      expect(wrapper.text()).toContain('Top');
+      expect(wrapper.text()).toContain('Bottom');
+      expect(wrapper.text()).toContain('Nav content');
+      expect(wrapper.text()).toContain('Footer');
+      expect(wrapper.find('.app-sidebar').exists()).toBe(true);
+    });
+  });
+
+  describe('SidebarItem', () => {
+    it('renders label and icon', async () => {
+      const wrapper = await mountSuspended(AppSidebarItem, {
+        props: { label: 'Dashboard', icon: 'ph:house' }
+      });
+
+      expect(wrapper.text()).toContain('Dashboard');
+      expect(wrapper.find('.app-sidebar-item__icon').exists()).toBe(true);
     });
   });
 

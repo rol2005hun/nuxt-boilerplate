@@ -1,0 +1,14 @@
+{
+  "appName": "Nuxt Boilerplate",
+  "nav": {
+    "signIn": "Bejelentkezés"
+  },
+  "layout": {
+    "language": "Nyelv",
+    "changeLanguage": "Nyelv váltása",
+    "selectLanguage": "Nyelv kiválasztása"
+  },
+  "theme": {
+    "selectLabel": "Téma kiválasztása"
+  }
+}
