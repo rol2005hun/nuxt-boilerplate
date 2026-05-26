@@ -82,8 +82,15 @@ describe('Theme Feature', () => {
 
   describe('useTheme', () => {
     it('exposes store methods and state', () => {
-      const { themeId, customColor, themes, setTheme, setCustomColor, resetCustomColor } =
-        useTheme();
+      const {
+        themeId,
+        customColor,
+        themes,
+        setTheme,
+        setCustomColor,
+        resetCustomColor,
+        initialize
+      } = useTheme();
       expect(themeId.value).toBe('default');
       expect(customColor.value).toBeNull();
       expect(themes.length).toBe(3);
@@ -96,6 +103,8 @@ describe('Theme Feature', () => {
 
       resetCustomColor();
       expect(customColor.value).toBeNull();
+
+      initialize();
     });
   });
 });

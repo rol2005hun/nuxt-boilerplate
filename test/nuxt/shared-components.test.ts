@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { mountSuspended, mockNuxtImport } from '@nuxt/test-utils/runtime';
-import { ref } from 'vue';
+import { nextTick, ref } from 'vue';
 
 import AppAvatar from '@/components/shared/Avatar.vue';
 import AppBadge from '@/components/shared/Badge.vue';
@@ -102,6 +102,20 @@ describe('Shared Components', () => {
       expect(wrapper.text()).toContain('Footer');
       expect(wrapper.find('.app-sidebar').exists()).toBe(true);
     });
+
+    it('toggles the pinned state', async () => {
+      const wrapper = await mountSuspended(AppSidebar, {
+        slots: {
+          default: () => 'Nav content'
+        }
+      });
+
+      expect(wrapper.find('.app-sidebar--pinned').exists()).toBe(false);
+
+      await wrapper.find('.app-sidebar__pin').trigger('click');
+
+      expect(wrapper.find('.app-sidebar--pinned').exists()).toBe(true);
+    });
   });
 
   describe('SidebarItem', () => {
@@ -112,6 +126,16 @@ describe('Shared Components', () => {
 
       expect(wrapper.text()).toContain('Dashboard');
       expect(wrapper.find('.app-sidebar-item__icon').exists()).toBe(true);
+    });
+
+    it('renders a link and active state', async () => {
+      const wrapper = await mountSuspended(AppSidebarItem, {
+        props: { label: 'Docs', to: '/docs', active: true }
+      });
+
+      expect(wrapper.find('.app-sidebar-item--active').exists()).toBe(true);
+      expect(wrapper.find('a').exists()).toBe(true);
+      expect(wrapper.find('a').attributes('href')).toBe('/docs');
     });
   });
 
@@ -128,6 +152,24 @@ describe('Shared Components', () => {
 
       expect(setLocale).toHaveBeenCalledWith('hu');
       expect(wrapper.text()).toContain('HU');
+    });
+
+    it('closes on escape and outside click', async () => {
+      const wrapper = await mountSuspended(AppLanguagePicker);
+
+      await wrapper.get('#language-picker-trigger').trigger('click');
+      expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+
+      await wrapper.trigger('keydown', { key: 'Escape' });
+      expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+
+      await wrapper.get('#language-picker-trigger').trigger('click');
+      expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+
+      document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      await nextTick();
+
+      expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
     });
   });
 

@@ -21,5 +21,16 @@ describe('i18n-locales plugin', () => {
     expect(mergeLocaleMessage).toHaveBeenCalled();
 
     expect(mergeLocaleMessage).toHaveBeenCalledWith('en', expect.any(Object));
+
+    expect(mergeLocaleMessage).toHaveBeenCalledWith(
+      'en',
+      expect.objectContaining({
+        core: expect.objectContaining({
+          layout: expect.objectContaining({
+            language: 'Language'
+          })
+        })
+      })
+    );
   });
 });

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { hexToHsl } from '../../app/utils/color';
+import { getReadableForegroundColor, hexToHsl } from '../../app/utils/color';
 
 describe('color utils', () => {
   it('converts hex to hsl correctly', () => {
@@ -20,5 +20,11 @@ describe('color utils', () => {
     expect(hexToHsl('#ffcccc')).toEqual({ h: 0, s: 100, l: 90 });
     // Invalid
     expect(hexToHsl('invalid')).toEqual({ h: 0, s: 0, l: 0 });
+  });
+
+  it('chooses a readable foreground color', () => {
+    expect(getReadableForegroundColor('#ffffff')).toBe('#000000');
+    expect(getReadableForegroundColor('#000000')).toBe('#ffffff');
+    expect(getReadableForegroundColor('invalid')).toBe('#0f172a');
   });
 });
