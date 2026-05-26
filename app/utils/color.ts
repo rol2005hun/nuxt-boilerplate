@@ -42,8 +42,7 @@ export function getReadableForegroundColor(hex: string): string {
   };
 
   const luminance = 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
-  const darkLuminance =
-    0.2126 * toLinear(15 / 255) + 0.7152 * toLinear(23 / 255) + 0.0722 * toLinear(42 / 255);
+  const blackLuminance = 0;
   const lightLuminance = 1;
 
   const contrastRatio = (foregroundLuminance: number): number => {
@@ -52,8 +51,8 @@ export function getReadableForegroundColor(hex: string): string {
     return (lighter + 0.05) / (darker + 0.05);
   };
 
-  const darkContrast = contrastRatio(darkLuminance);
+  const darkContrast = contrastRatio(blackLuminance);
   const lightContrast = contrastRatio(lightLuminance);
 
-  return darkContrast >= lightContrast ? '#0f172a' : '#ffffff';
+  return darkContrast >= lightContrast ? '#000000' : '#ffffff';
 }

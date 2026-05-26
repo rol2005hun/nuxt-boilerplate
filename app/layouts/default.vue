@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { themeId, themes, setTheme } = useTheme();
+const { themeId, themes } = useTheme();
 const { isAuthenticated, currentUser, logout } = useAuth();
 </script>
 
@@ -17,13 +17,7 @@ const { isAuthenticated, currentUser, logout } = useAuth();
           <label for="theme-select" class="layout__sr-only">
             {{ $t('core.theme.selectLabel') }}
           </label>
-          <select
-            id="theme-select"
-            :value="themeId"
-            class="layout__theme-select"
-            @change="
-              setTheme(($event.target as HTMLSelectElement).value as (typeof themes)[number]['id'])
-            ">
+          <select id="theme-select" v-model="themeId" class="layout__theme-select">
             <option v-for="theme in themes" :key="theme.id" :value="theme.id">
               {{ theme.label }}
             </option>

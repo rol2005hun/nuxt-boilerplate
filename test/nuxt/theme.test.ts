@@ -47,7 +47,7 @@ describe('Theme Feature', () => {
       expect(document.documentElement.style.getPropertyValue('--color-primary-s')).toBe('100%');
       expect(document.documentElement.style.getPropertyValue('--color-primary-l')).toBe('50%');
       expect(document.documentElement.style.getPropertyValue('--color-primary-foreground')).toBe(
-        '#0f172a'
+        '#000000'
       );
     });
 

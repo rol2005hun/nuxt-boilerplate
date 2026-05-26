@@ -10,7 +10,10 @@ export function useTheme() {
   const store = useThemeStore();
 
   return {
-    themeId: computed(() => store.themeId),
+    themeId: computed<ThemeId>({
+      get: () => store.themeId,
+      set: (id) => store.setTheme(id)
+    }),
     customColor: computed(() => store.customColor),
     themes: THEME_OPTIONS,
     setTheme: (id: ThemeId) => store.setTheme(id),

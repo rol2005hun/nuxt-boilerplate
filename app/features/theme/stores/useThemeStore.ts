@@ -2,6 +2,37 @@ import type { ThemeId, CustomColor } from '../types/theme.types';
 
 import { getReadableForegroundColor } from '@/utils/color';
 
+function readCookieValue(name: string): string | null {
+  if (!import.meta.client) {
+    return null;
+  }
+
+  const cookie = document.cookie.split('; ').find((entry) => entry.startsWith(`${name}=`));
+
+  if (!cookie) {
+    return null;
+  }
+
+  const value = decodeURIComponent(cookie.slice(name.length + 1));
+  return value.length > 0 ? value : null;
+}
+
+function parseThemeId(value: string | null): ThemeId | null {
+  if (value === 'default' || value === 'dark' || value === 'ocean') {
+    return value;
+  }
+
+  return null;
+}
+
+function parseCustomColor(value: string | null): CustomColor | null {
+  if (!value) {
+    return null;
+  }
+
+  return { hex: value, ...hexToHsl(value) };
+}
+
 export const useThemeStore = defineStore('theme', () => {
   const themeIdCookie = useCookie<ThemeId>('theme-id', {
     default: () => 'default',
@@ -12,16 +43,10 @@ export const useThemeStore = defineStore('theme', () => {
     maxAge: 60 * 60 * 24 * 365
   });
 
-  const initialThemeId =
-    typeof themeIdCookie.value === 'string' && themeIdCookie.value.length > 0
-      ? (themeIdCookie.value as ThemeId)
-      : 'default';
+  const initialThemeId: ThemeId = parseThemeId(readCookieValue('theme-id')) ?? 'default';
   const themeId = ref<ThemeId>(initialThemeId);
 
-  const initialCustom =
-    typeof customColorCookie.value === 'string' && customColorCookie.value.length > 0
-      ? { hex: customColorCookie.value, ...hexToHsl(customColorCookie.value) }
-      : null;
+  const initialCustom = parseCustomColor(readCookieValue('theme-custom-color'));
   const customColor = ref<CustomColor | null>(initialCustom);
 
   watch(themeId, (value) => {
