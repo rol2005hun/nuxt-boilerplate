@@ -4,6 +4,10 @@ import { nextTick } from 'vue';
 import { useThemeStore } from '@/features/theme/stores/useThemeStore';
 import { useTheme } from '@/features/theme/composables/useTheme';
 
+function clearCookie(name: string): void {
+  document.cookie = `${name}=; Max-Age=0; path=/`;
+}
+
 describe('Theme Feature', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
@@ -12,14 +16,8 @@ describe('Theme Feature', () => {
     document.documentElement.style.removeProperty('--color-primary-s');
     document.documentElement.style.removeProperty('--color-primary-l');
 
-    // Reset local storage
-    localStorage.clear();
-
-    // Reset cookies
-    const themeCookie = useCookie('theme-id');
-    themeCookie.value = 'dark';
-    const colorCookie = useCookie('theme-custom-color');
-    colorCookie.value = null;
+    clearCookie('theme-id');
+    clearCookie('theme-custom-color');
   });
 
   describe('useThemeStore', () => {
@@ -48,6 +46,9 @@ describe('Theme Feature', () => {
       expect(document.documentElement.style.getPropertyValue('--color-primary-h')).toBe('0');
       expect(document.documentElement.style.getPropertyValue('--color-primary-s')).toBe('100%');
       expect(document.documentElement.style.getPropertyValue('--color-primary-l')).toBe('50%');
+      expect(document.documentElement.style.getPropertyValue('--color-primary-foreground')).toBe(
+        '#0f172a'
+      );
     });
 
     it('resets custom color', async () => {
@@ -57,12 +58,25 @@ describe('Theme Feature', () => {
       await nextTick();
       expect(store.customColor).toBeNull();
       expect(document.documentElement.style.getPropertyValue('--color-primary-h')).toBe('');
+      expect(document.documentElement.style.getPropertyValue('--color-primary-foreground')).toBe(
+        ''
+      );
     });
 
     it('initializes without cookie applies default', () => {
       const store = useThemeStore();
       store.initialize();
       expect(document.documentElement.getAttribute('data-theme')).toBe('default');
+    });
+
+    it('initializes from theme cookie', () => {
+      document.cookie = 'theme-id=dark; path=/';
+
+      const store = useThemeStore();
+      store.initialize();
+
+      expect(store.themeId).toBe('dark');
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
     });
   });
 

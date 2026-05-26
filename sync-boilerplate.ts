@@ -23,6 +23,9 @@ const TARGETS = [
   'stylelint.config.mjs',
   'sync-boilerplate.ts',
   'tsconfig.json',
+  'app/plugins/i18n-locales.ts',
+  'app/plugins/pinia-orm.ts',
+  'app/plugins/theme.client.ts',
   'vitest.config.ts'
 ];
 

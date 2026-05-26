@@ -1,0 +1,9 @@
+{
+  "appName": "Nuxt Boilerplate",
+  "nav": {
+    "signIn": "Sign in"
+  },
+  "theme": {
+    "selectLabel": "Select theme"
+  }
+}

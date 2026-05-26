@@ -27,3 +27,33 @@ export function hexToHsl(hex: string): { h: number; s: number; l: number } {
     l: Math.round(l * 100)
   };
 }
+
+export function getReadableForegroundColor(hex: string): string {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (!result) return '#0f172a';
+
+  const [, rHex = '0', gHex = '0', bHex = '0'] = result;
+  const r = parseInt(rHex, 16) / 255;
+  const g = parseInt(gHex, 16) / 255;
+  const b = parseInt(bHex, 16) / 255;
+
+  const toLinear = (value: number): number => {
+    return value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+  };
+
+  const luminance = 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
+  const darkLuminance =
+    0.2126 * toLinear(15 / 255) + 0.7152 * toLinear(23 / 255) + 0.0722 * toLinear(42 / 255);
+  const lightLuminance = 1;
+
+  const contrastRatio = (foregroundLuminance: number): number => {
+    const lighter = Math.max(luminance, foregroundLuminance);
+    const darker = Math.min(luminance, foregroundLuminance);
+    return (lighter + 0.05) / (darker + 0.05);
+  };
+
+  const darkContrast = contrastRatio(darkLuminance);
+  const lightContrast = contrastRatio(lightLuminance);
+
+  return darkContrast >= lightContrast ? '#0f172a' : '#ffffff';
+}

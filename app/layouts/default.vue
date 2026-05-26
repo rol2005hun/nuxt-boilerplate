@@ -8,11 +8,17 @@ const { isAuthenticated, currentUser, logout } = useAuth();
     <header class="layout__header">
       <nav class="layout__nav">
         <NuxtLink to="/" class="layout__logo">
-          {{ $t('appName') }}
+          {{ $t('core.appName') }}
         </NuxtLink>
 
         <div class="layout__nav-actions">
+          <AppButton href="/docs" variant="ghost">{{ $t('docs.nav') }}</AppButton>
+
+          <label for="theme-select" class="layout__sr-only">
+            {{ $t('core.theme.selectLabel') }}
+          </label>
           <select
+            id="theme-select"
             :value="themeId"
             class="layout__theme-select"
             @change="
@@ -30,7 +36,7 @@ const { isAuthenticated, currentUser, logout } = useAuth();
             </AppButton>
           </template>
           <template v-else>
-            <AppButton href="/login" variant="secondary">{{ $t('nav.signIn') }}</AppButton>
+            <AppButton href="/login" variant="secondary">{{ $t('core.nav.signIn') }}</AppButton>
           </template>
         </div>
       </nav>
@@ -41,7 +47,7 @@ const { isAuthenticated, currentUser, logout } = useAuth();
     </main>
 
     <footer class="layout__footer">
-      <p>{{ $t('appName') }} © {{ new Date().getFullYear() }}</p>
+      <p>{{ $t('core.appName') }} © {{ new Date().getFullYear() }}</p>
     </footer>
   </div>
 </template>
@@ -77,7 +83,7 @@ const { isAuthenticated, currentUser, logout } = useAuth();
   &__logo {
     font-size: var(--text-lg);
     font-weight: 700;
-    color: var(--color-primary);
+    color: var(--color-text-primary);
     text-decoration: none;
   }
 
@@ -95,6 +101,18 @@ const { isAuthenticated, currentUser, logout } = useAuth();
     color: var(--color-text-primary);
     font-size: var(--text-sm);
     cursor: pointer;
+  }
+
+  &__sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+    white-space: nowrap;
   }
 
   &__user {

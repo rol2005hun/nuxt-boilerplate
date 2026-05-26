@@ -1,0 +1,25 @@
+{
+  "nav": "Docs",
+  "metaTitle": "Docs",
+  "eyebrow": "Documentation",
+  "title": "Build features with confidence",
+  "subtitle": "This example page reads translations from app/features/docs/locales/en.json and renders a feature-first docs experience.",
+  "actions": {
+    "primary": "Back to home",
+    "secondary": "Open login"
+  },
+  "sections": {
+    "quickStart": {
+      "title": "Quick start",
+      "description": "Create a feature folder, define your types first, then wire the store, composable, and component in small steps."
+    },
+    "architecture": {
+      "title": "Architecture",
+      "description": "Keep pages thin. Put business logic in composables and state in Pinia stores so views stay clean and predictable."
+    },
+    "i18n": {
+      "title": "Feature locales",
+      "description": "Place translations in app/features/docs/locales/en.json so the i18n plugin can merge them under docs.* keys."
+    }
+  }
+}
