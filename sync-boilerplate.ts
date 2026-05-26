@@ -103,7 +103,9 @@ const run = () => {
   console.log('');
 
   log.step('Discarding changes for files not in TARGETS...');
-  const changedFiles = exec('git diff --name-only HEAD').split('\n').filter(Boolean);
+  const modifiedFiles = exec('git diff --name-only HEAD').split('\n').filter(Boolean);
+  const stagedFiles = exec('git diff --name-only --cached HEAD').split('\n').filter(Boolean);
+  const changedFiles = [...new Set([...modifiedFiles, ...stagedFiles])];
 
   for (const file of changedFiles) {
     const isTarget = TARGETS.some((t) => file === t || file.startsWith(`${t}/`));
