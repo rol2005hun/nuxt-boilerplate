@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest';
-import { mountSuspended } from '@nuxt/test-utils/runtime';
+import { describe, it, expect, vi } from 'vitest';
+import { mountSuspended, mockNuxtImport } from '@nuxt/test-utils/runtime';
+import { ref } from 'vue';
 
 import AppAvatar from '@/components/shared/Avatar.vue';
 import AppBadge from '@/components/shared/Badge.vue';
@@ -15,6 +16,24 @@ import AppToast from '@/components/shared/Toast.vue';
 import AppToggle from '@/components/shared/Toggle.vue';
 import AppTooltip from '@/components/shared/Tooltip.vue';
 import AppButton from '@/components/shared/Button.vue';
+import AppLanguagePicker from '@/components/shared/LanguagePicker.vue';
+
+const locale = ref<'en' | 'hu'>('en');
+const setLocale = vi.fn(async (code: string) => {
+  locale.value = code as 'en' | 'hu';
+});
+
+mockNuxtImport('useI18n', () => {
+  return () => ({
+    t: (key: string) => key,
+    locale,
+    locales: ref([
+      { code: 'en', name: 'English' },
+      { code: 'hu', name: 'Magyar' }
+    ]),
+    setLocale
+  });
+});
 
 describe('Shared Components', () => {
   describe('Avatar', () => {
@@ -61,6 +80,22 @@ describe('Shared Components', () => {
       const wrapper = await mountSuspended(AppButton, { props: { loading: true } });
       expect(wrapper.find('.btn__spinner').exists()).toBe(true);
       await wrapper.trigger('click');
+    });
+  });
+
+  describe('LanguagePicker', () => {
+    it('renders locales and switches language', async () => {
+      const wrapper = await mountSuspended(AppLanguagePicker);
+
+      expect(wrapper.text()).toContain('EN');
+
+      await wrapper.get('#language-picker-trigger').trigger('click');
+      expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+
+      await wrapper.get('#language-picker-option-hu').trigger('click');
+
+      expect(setLocale).toHaveBeenCalledWith('hu');
+      expect(wrapper.text()).toContain('HU');
     });
   });
 

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import AppLanguagePicker from '@/components/shared/LanguagePicker.vue';
+
 const { themeId, themes } = useTheme();
 const { isAuthenticated, currentUser, logout } = useAuth();
 </script>
@@ -22,6 +24,8 @@ const { isAuthenticated, currentUser, logout } = useAuth();
               {{ theme.label }}
             </option>
           </select>
+
+          <AppLanguagePicker />
 
           <template v-if="isAuthenticated">
             <span class="layout__user">{{ currentUser?.name }}</span>
@@ -84,6 +88,7 @@ const { isAuthenticated, currentUser, logout } = useAuth();
   &__nav-actions {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: var(--space-3);
   }
 

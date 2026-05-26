@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { LoginCredentials } from '@/features/auth/types/auth.types';
+import AppLanguagePicker from '@/components/shared/LanguagePicker.vue';
 
 definePageMeta({ layout: 'auth' });
 
@@ -18,6 +19,10 @@ async function handleSubmit() {
 
 <template>
   <section class="login">
+    <div class="login__language-picker">
+      <AppLanguagePicker />
+    </div>
+
     <div class="login__card">
       <h1 class="login__title">{{ t('auth.login.title') }}</h1>
 
@@ -65,9 +70,17 @@ async function handleSubmit() {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   min-height: 100dvh;
   padding: var(--space-6);
   background-color: var(--color-bg);
+
+  &__language-picker {
+    position: absolute;
+    top: var(--space-6);
+    right: var(--space-6);
+    z-index: 1;
+  }
 
   &__card {
     width: 100%;

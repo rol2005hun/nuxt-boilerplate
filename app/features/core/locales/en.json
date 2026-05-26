@@ -3,6 +3,11 @@
   "nav": {
     "signIn": "Sign in"
   },
+  "layout": {
+    "language": "Language",
+    "changeLanguage": "Change language",
+    "selectLanguage": "Select a language"
+  },
   "theme": {
     "selectLabel": "Select theme"
   }
