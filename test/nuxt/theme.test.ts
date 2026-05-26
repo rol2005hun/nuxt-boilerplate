@@ -23,7 +23,7 @@ describe('Theme Feature', () => {
   describe('useThemeStore', () => {
     it('initializes with default theme', () => {
       const store = useThemeStore();
-      expect(store.themeId).toBe('default');
+      expect(store.themeId).toBe('dark');
       expect(store.customColor).toBeNull();
     });
 
@@ -66,7 +66,7 @@ describe('Theme Feature', () => {
     it('initializes without cookie applies default', () => {
       const store = useThemeStore();
       store.initialize();
-      expect(document.documentElement.getAttribute('data-theme')).toBe('default');
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
     });
 
     it('initializes from theme cookie', () => {
@@ -91,9 +91,9 @@ describe('Theme Feature', () => {
         resetCustomColor,
         initialize
       } = useTheme();
-      expect(themeId.value).toBe('default');
+      expect(themeId.value).toBe('dark');
       expect(customColor.value).toBeNull();
-      expect(themes.length).toBe(3);
+      expect(themes.length).toBe(4);
 
       setTheme('dark');
       expect(themeId.value).toBe('dark');

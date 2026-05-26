@@ -1,60 +1,27 @@
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
+import { hexToHsl, getContrastColor } from '~/utils/color';
 import type { ThemeId, CustomColor } from '../types/theme.types';
 
-import { getReadableForegroundColor } from '@/utils/color';
-
-function readCookieValue(name: string): string | null {
-  if (!import.meta.client) {
-    return null;
-  }
-
-  const cookie = document.cookie.split('; ').find((entry) => entry.startsWith(`${name}=`));
-
-  if (!cookie) {
-    return null;
-  }
-
-  const value = decodeURIComponent(cookie.slice(name.length + 1));
-  return value.length > 0 ? value : null;
-}
-
-function parseThemeId(value: string | null): ThemeId | null {
-  if (value === 'default' || value === 'dark' || value === 'ocean') {
-    return value;
-  }
-
-  return null;
-}
-
-function parseCustomColor(value: string | null): CustomColor | null {
-  if (!value) {
-    return null;
-  }
-
-  return { hex: value, ...hexToHsl(value) };
-}
-
 export const useThemeStore = defineStore('theme', () => {
-  const themeIdCookie = useCookie<ThemeId>('theme-id', {
-    default: () => 'default',
-    maxAge: 60 * 60 * 24 * 365
-  });
-  const customColorCookie = useCookie<string | null>('theme-custom-color', {
+  const cookieThemeId = useCookie<ThemeId>('theme-id', { default: () => 'dark', maxAge: 31536000 });
+  const cookieCustomColor = useCookie<string | null>('theme-custom-color', {
     default: () => null,
-    maxAge: 60 * 60 * 24 * 365
+    maxAge: 31536000
   });
 
-  const initialThemeId: ThemeId = parseThemeId(readCookieValue('theme-id')) ?? 'default';
-  const themeId = ref<ThemeId>(initialThemeId);
+  const themeId = ref<ThemeId>(cookieThemeId.value || 'dark');
+  const customColor = ref<CustomColor | null>(
+    cookieCustomColor.value
+      ? { hex: cookieCustomColor.value, ...hexToHsl(cookieCustomColor.value) }
+      : null
+  );
 
-  const initialCustom = parseCustomColor(readCookieValue('theme-custom-color'));
-  const customColor = ref<CustomColor | null>(initialCustom);
-
-  watch(themeId, (value) => {
-    themeIdCookie.value = value;
+  watch(themeId, (val) => {
+    cookieThemeId.value = val;
   });
-
-  watch(customColor, (value) => {
-    customColorCookie.value = value?.hex ?? null;
+  watch(customColor, (val) => {
+    cookieCustomColor.value = val?.hex ?? null;
   });
 
   function applyThemeToDom(id: ThemeId) {
@@ -62,11 +29,12 @@ export const useThemeStore = defineStore('theme', () => {
   }
 
   function applyColorToDom(color: CustomColor) {
+    if (!import.meta.client) return;
     const el = document.documentElement;
     el.style.setProperty('--color-primary-h', String(color.h));
     el.style.setProperty('--color-primary-s', `${color.s}%`);
     el.style.setProperty('--color-primary-l', `${color.l}%`);
-    el.style.setProperty('--color-primary-foreground', getReadableForegroundColor(color.hex));
+    el.style.setProperty('--color-primary-foreground', getContrastColor(color.hex));
   }
 
   function setTheme(id: ThemeId) {
@@ -101,15 +69,9 @@ export const useThemeStore = defineStore('theme', () => {
   }
 
   function initialize() {
-    if (!import.meta.client) {
-      return;
-    }
-
+    if (!import.meta.client) return;
     applyThemeToDom(themeId.value);
-
-    if (customColor.value) {
-      applyColorToDom(customColor.value);
-    }
+    if (customColor.value) applyColorToDom(customColor.value);
   }
 
   return { themeId, customColor, setTheme, setCustomColor, resetCustomColor, initialize };

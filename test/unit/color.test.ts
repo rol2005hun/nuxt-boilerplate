@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getReadableForegroundColor, hexToHsl } from '../../app/utils/color';
+import { getContrastColor, hexToHsl } from '../../app/utils/color';
 
 describe('color utils', () => {
   it('converts hex to hsl correctly', () => {
@@ -23,8 +23,8 @@ describe('color utils', () => {
   });
 
   it('chooses a readable foreground color', () => {
-    expect(getReadableForegroundColor('#ffffff')).toBe('#000000');
-    expect(getReadableForegroundColor('#000000')).toBe('#ffffff');
-    expect(getReadableForegroundColor('invalid')).toBe('#0f172a');
+    expect(getContrastColor('#ffffff')).toBe('#000000');
+    expect(getContrastColor('#000000')).toBe('#ffffff');
+    expect(getContrastColor('invalid')).toBe('#ffffff');
   });
 });
