@@ -3,15 +3,17 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      titleTemplate: '%s | Nuxt Boilerplate',
-      charset: 'utf-8',
-      viewport: 'width=device-width, initial-scale=1'
+      titleTemplate: '%s | Nuxt Boilerplate'
     }
   },
 
   devtools: { enabled: true },
   srcDir: 'app/',
   serverDir: 'server/',
+
+  build: {
+    transpile: ['pinia-orm']
+  },
 
   modules: [
     '@nuxt/eslint',
@@ -35,6 +37,10 @@ export default defineNuxtConfig({
     url: 'https://example.com',
     name: 'Nuxt Boilerplate',
     description: 'A scalable Nuxt boilerplate.'
+  },
+
+  routeRules: {
+    '/**': { robots: false }
   },
 
   colorMode: {
@@ -80,7 +86,6 @@ export default defineNuxtConfig({
     typeCheck: true,
     tsConfig: {
       compilerOptions: {
-        experimentalDecorators: true,
         noUnusedLocals: true,
         noUnusedParameters: true,
         noImplicitReturns: true,
@@ -95,13 +100,6 @@ export default defineNuxtConfig({
   vite: {
     optimizeDeps: {
       include: ['pinia-orm', 'pinia-orm/decorators']
-    },
-    esbuild: {
-      tsconfigRaw: {
-        compilerOptions: {
-          experimentalDecorators: true
-        }
-      }
     }
   }
 });

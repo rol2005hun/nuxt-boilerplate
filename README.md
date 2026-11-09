@@ -4,19 +4,19 @@ A production-ready Nuxt 4 boilerplate with feature-based architecture, strict Ty
 
 ## Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Nuxt 4 (`srcDir: app/`, `serverDir: server/`) |
-| Language | TypeScript (strict mode) |
-| State | Pinia + Pinia ORM + pinia-plugin-persistedstate |
-| Async state | @pinia/colada |
-| Styling | SCSS + CSS custom properties (design tokens) |
-| i18n | @nuxtjs/i18n with auto-loading glob plugin |
-| Icons | @nuxt/icon (Phosphor, Fluent, Flag collections) |
-| SEO | @nuxtjs/seo (sitemap, OG, robots) |
-| Linting | ESLint + oxlint + Prettier |
-| Testing | Vitest (unit + Nuxt integration) + Playwright (e2e) |
-| Git hooks | Husky + commitlint (Conventional Commits) |
+| Layer       | Technology                                          |
+| ----------- | --------------------------------------------------- |
+| Framework   | Nuxt 4 (`srcDir: app/`, `serverDir: server/`)       |
+| Language    | TypeScript (strict mode)                            |
+| State       | Pinia + Pinia ORM + pinia-plugin-persistedstate     |
+| Async state | @pinia/colada                                       |
+| Styling     | SCSS + CSS custom properties (design tokens)        |
+| i18n        | @nuxtjs/i18n with auto-loading glob plugin          |
+| Icons       | @nuxt/icon (Phosphor, Fluent, Flag collections)     |
+| SEO         | @nuxtjs/seo (sitemap, OG, robots)                   |
+| Linting     | ESLint + oxlint + Prettier                          |
+| Testing     | Vitest (unit + Nuxt integration) + Playwright (e2e) |
+| Git hooks   | Husky + commitlint (Conventional Commits)           |
 
 ## Architecture
 
@@ -53,20 +53,20 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Scripts
 
-| Command | Description |
-|---|---|
-| `pnpm dev` | Start dev server |
-| `pnpm build` | Build for production |
-| `pnpm preview` | Preview production build |
-| `pnpm check` | Typecheck + lint + format check |
-| `pnpm lint` | ESLint |
-| `pnpm lint:fix` | ESLint with auto-fix |
-| `pnpm format` | Prettier write |
-| `pnpm test` | All tests (unit + Nuxt integration) |
-| `pnpm test:coverage` | Tests with V8 coverage report |
-| `pnpm test:unit` | Unit tests only |
-| `pnpm test:nuxt` | Nuxt integration tests only |
-| `pnpm test:e2e` | Playwright e2e tests |
+| Command              | Description                         |
+| -------------------- | ----------------------------------- |
+| `pnpm dev`           | Start dev server                    |
+| `pnpm build`         | Build for production                |
+| `pnpm preview`       | Preview production build            |
+| `pnpm check`         | Typecheck + lint + format check     |
+| `pnpm lint`          | ESLint                              |
+| `pnpm lint:fix`      | ESLint with auto-fix                |
+| `pnpm format`        | Prettier write                      |
+| `pnpm test`          | All tests (unit + Nuxt integration) |
+| `pnpm test:coverage` | Tests with V8 coverage report       |
+| `pnpm test:unit`     | Unit tests only                     |
+| `pnpm test:nuxt`     | Nuxt integration tests only         |
+| `pnpm test:e2e`      | Playwright e2e tests                |
 
 ## Theme System
 
@@ -78,6 +78,7 @@ Three built-in themes: `default` (indigo light), `dark`, `ocean` (teal).
 - Users can override the primary color at runtime via `useTheme().setCustomColor(hex)`
 
 **Adding a new theme:**
+
 1. Create `app/assets/scss/themes/_<name>.scss`
 2. Add the id to `ThemeId` in `app/features/theme/types/theme.types.ts`
 3. Add the option to `THEME_OPTIONS` in `useTheme.ts`

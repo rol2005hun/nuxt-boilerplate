@@ -1,12 +1,21 @@
 import { Model } from 'pinia-orm';
-import { Num, Str, Bool } from 'pinia-orm/decorators';
 
 export class User extends Model {
   static override entity = 'users';
 
-  @Num(0) declare id: number;
-  @Str('') declare name: string;
-  @Str('') declare email: string;
-  @Bool(false) declare isAdmin: boolean;
-  @Str('') declare avatarUrl: string;
+  static override fields() {
+    return {
+      id: this.number(0),
+      name: this.string(''),
+      email: this.string(''),
+      isAdmin: this.boolean(false),
+      avatarUrl: this.string('')
+    };
+  }
+
+  id!: number;
+  name!: string;
+  email!: string;
+  isAdmin!: boolean;
+  avatarUrl!: string;
 }
